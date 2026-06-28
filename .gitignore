@@ -1,3 +1,23 @@
+###############################################################################
+# SECTION: Project ############################################################
+###############################################################################
+# DESCRIPTION: Windows AMD64 build
+/build/executables/windows/*
+!/build/executables/windows/SConscript
+
+# DESCRIPTION: Linux x86_64 build
+/build/executables/linux/*
+!/build/executables/linux/SConscript
+
+###############################################################################
+# SECTION: Python/SCons #######################################################
+###############################################################################
+*.pyc
+.sconsign.dblite
+
+###############################################################################
+# SECTION: C++ ################################################################
+###############################################################################
 # Prerequisites
 *.d
 
@@ -39,11 +59,6 @@
 *.out
 *.app
 
-# Build directories
-build/
-Build/
-build-*/
-
 # CMake generated files
 CMakeFiles/
 CMakeCache.txt
@@ -63,7 +78,3 @@ vcpkg_installed/
 
 # debug information files
 *.dwo
-
-# test output & cache
-Testing/
-.cache/

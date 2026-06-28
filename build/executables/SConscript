@@ -1,0 +1,31 @@
+# -*- mode: python -*-
+# SCons build file
+
+Import(
+    'HOST_PLATFORM', 'SUPPORTED_HOST_TARGET_COMBINATIONS',
+    'env'
+)
+
+# DESCRIPTION: Verify whether the current host platform is supported and 
+# select the appropriate build subroutine
+# REMARK: Extremely simplified in comparison to project, since there is no 
+# cross-compilation available, which would be in part checked here and 
+# increase the complexity a lot, rendering outsourcing the logic into this
+# SConscript the best option to minimize code repetition.
+if HOST_PLATFORM in SUPPORTED_HOST_TARGET_COMBINATIONS:
+    _tmp_supportedTargets : list = SUPPORTED_HOST_TARGET_COMBINATIONS[HOST_PLATFORM]
+    _tmp_target = GetOption("targetPlatform") 
+
+    if _tmp_target in _tmp_supportedTargets:
+        match _tmp_target:
+            case "linux.x86_64":
+                SConscript("./linux/SConscript")
+
+            case "windows.amd64":
+                SConscript("./windows/SConscript")
+
+    else:
+        raise Exception("Host Platform does not support compilation for selected Target Platform. Aborting!")
+
+else:
+    raise Exception("Host Platform is not supported. Aborting!")

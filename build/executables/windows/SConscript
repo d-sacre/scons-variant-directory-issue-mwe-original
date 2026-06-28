@@ -1,0 +1,32 @@
+# -*- mode: python -*-
+# SCons build file
+
+import os
+
+Import(
+    'HOST_PLATFORM', 'COMPILE_COMMANDS_FILE_PATH', 
+    'programTarget', 'programSources', 'env'
+)
+
+# DESCRIPTION: Setting up the variant directory correctly, so that compilation
+# output and byproducts are located in the correct folders
+# REMARK: Specifying the variant_dir and src_dir whilst loading the SConscript
+# leads to very hard to understand behavior with either sources not being found
+# or the variant directory being wrong
+VariantDir("./", '../../../', duplicate = False)
+
+# DESCRIPTION: Create the environment and configure it
+# REMARK: Setting the compile commands at this stage ensures that the compile
+# commands data base is stored as intended in the variant directory and will
+# not be overwritten when compiling other variants
+windows_amd64 = env.Clone()
+windows_amd64.CompilationDatabase(COMPILE_COMMANDS_FILE_PATH)
+
+# DESCRIPTION: Cross-compilation setup
+# REMARK: Omitted in this MWE to simplify logic
+
+# DESCRIPTION: Creation of program
+windows_amd64.Program(
+    programTarget + ".exe", 
+    programSources
+)
