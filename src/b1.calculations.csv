@@ -1,0 +1,5 @@
+uuid,operation,type
+b11,a1+a2,float
+b12,a2+a5,int
+b13,a1+a3,float
+b14,a4+a3,double

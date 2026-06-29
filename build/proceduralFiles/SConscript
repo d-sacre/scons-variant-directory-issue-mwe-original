@@ -77,48 +77,48 @@ proceduralFiles.Append(BUILDERS = _tmp_customBuildersInitialized)
 # relevant files. If it would be called as a SCons builder, the glob approach
 # would no longer work and changes would be lost. The only downside of not having
 # a SCons builder is that the logic is run every time, which costs performance. 
-PROCEDURAL_FILE_DATABASE = _tmp_transpiler.Database.TargetSourcePairs.generate()
+TRANSPILER_TARGET_SOURCE_PAIRS = _tmp_transpiler.Database.TargetSourcePairs.generate()
 
-# ##################################################################################
-# # DESCRIPTION: Feed builders with target source pairs ############################
-# ##################################################################################
-# # DESCRIPTION: Create user defined value data bases  
-# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["database"]["values"]["local"]["userDefined"]:
-#     proceduralFiles.ValueDatabase(
-#         _targetSourcePair["target"], _targetSourcePair["source"]
-#     )
+##################################################################################
+# DESCRIPTION: Feed builders with target source pairs ############################
+##################################################################################
+# DESCRIPTION: Create user defined value data bases  
+for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["database/values/local/userDefined"]:
+    proceduralFiles.ValueDatabase(
+        _targetSourcePair["target"], _targetSourcePair["source"]
+    )
 
-# # DESCRIPTION: Create global value data base, so that values can be shared 
-# proceduralFiles.GlobalUserDefinedValueDatabase(
-#     PROCEDURAL_FILE_DATABASE["database"]["values"]["global"]["userDefined"]["target"], 
-#     PROCEDURAL_FILE_DATABASE["database"]["values"]["global"]["userDefined"]["source"]
-# )
+# DESCRIPTION: Create global value data base, so that values can be shared 
+proceduralFiles.GlobalUserDefinedValueDatabase(
+    TRANSPILER_TARGET_SOURCE_PAIRS["database/values/global/userDefined"]["target"], 
+    TRANSPILER_TARGET_SOURCE_PAIRS["database/values/global/userDefined"]["source"]
+)
 
-# # DESCRIPTION: Create calculation data bases
-# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["database"]["calculations"]["local"]:
-#     proceduralFiles.CalculationDatabase(
-#         _targetSourcePair["target"], _targetSourcePair["source"]
-#     )
+# DESCRIPTION: Create calculation data bases
+for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["database/calculations/local"]:
+    proceduralFiles.CalculationDatabase(
+        _targetSourcePair["target"], _targetSourcePair["source"]
+    )
 
-# proceduralFiles.GlobalCalculationDatabase(
-#     PROCEDURAL_FILE_DATABASE["database"]["calculations"]["global"]["target"],
-#     PROCEDURAL_FILE_DATABASE["database"]["calculations"]["global"]["source"]
-# )
+proceduralFiles.GlobalCalculationDatabase(
+    TRANSPILER_TARGET_SOURCE_PAIRS["database/calculations/global"]["target"],
+    TRANSPILER_TARGET_SOURCE_PAIRS["database/calculations/global"]["source"]
+)
 
-# # DESCRIPTION: Create global value data base
-# proceduralFiles.GlobalValueDatabase(
-#     PROCEDURAL_FILE_DATABASE["database"]["values"]["global"]["compiled"]["target"],
-#     PROCEDURAL_FILE_DATABASE["database"]["values"]["global"]["compiled"]["source"]
-# )
+# DESCRIPTION: Create global value data base
+proceduralFiles.GlobalValueDatabase(
+    TRANSPILER_TARGET_SOURCE_PAIRS["database/values/global/compiled"]["target"],
+    TRANSPILER_TARGET_SOURCE_PAIRS["database/values/global/compiled"]["source"]
+)
 
-# # DESCRIPTION: Create local compiled value data bases:
-# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["database"]["values"]["local"]["compiled"]:
-#     proceduralFiles.LocalCompiledValueDatabase(
-#         _targetSourcePair["target"], _targetSourcePair["source"]
-#     )
+# DESCRIPTION: Create local compiled value data bases:
+for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["database/values/local/compiled"]:
+    proceduralFiles.LocalCompiledValueDatabase(
+        _targetSourcePair["target"], _targetSourcePair["source"]
+    )
 
 # # DESCRIPTION: Create value header files
-# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["sourceCode"]["header"]["value"]:
+# for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["sourceCode/header/value"]:
 #     proceduralFiles.ValueHeaderFile(
 #         _targetSourcePair["target"], _targetSourcePair["source"]
 #     )
@@ -138,7 +138,7 @@ PROCEDURAL_FILE_DATABASE = _tmp_transpiler.Database.TargetSourcePairs.generate()
 #     )
 
 # # DESCRIPTION: Create Test Routine Header files
-# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["sourceCode"]["header"]["testRoutine"]:
+# for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["sourceCode/header/testRoutine"]:
 #     proceduralFiles.TestRoutineHeaderFile(
 #         _targetSourcePair["target"], _targetSourcePair["source"]
 #     )

@@ -1,4 +1,5 @@
 import json
+import os
 
 class Base:
     def __init__(self):
@@ -21,7 +22,7 @@ class FromCSV(Base):
 
         return _tmp_data
 
-    def _processSingleLine(self, a_lineData : str) -> dict:
+    def _processSingleLine(self, a_header : list, a_lineData : str) -> dict:
         # DESCRIPTION: Clean the string by removing the trailing newline
         _tmp_entryString : str = a_lineData.replace("\n", "")
 
@@ -30,24 +31,34 @@ class FromCSV(Base):
         _tmp_entryList : list = _tmp_entryString.split(",")
 
         _tmp_entry : dict = {}
-        for _i,_id in enumerate(_tmp_header):
+        for _i,_id in enumerate(a_header):
             _tmp_entry[_id] = _tmp_entryList[_i]
 
         return _tmp_entry
 
     # DESCRIPTION: Parse the csv data into a dictionary format
-    def _parseRawData(a_rawData : list) -> dict:
+    def _parseRawData(self, a_rawData : list) -> dict:
         _tmp_database : dict = {}
 
         # DESCRIPTION: Get the header for later use as keys
-        _tmp_header = a_rawData[0]
+        _tmp_header = (a_rawData[0].replace("\n", "")).split(",")
+        print(_tmp_header)
 
         # DESCRIPTION: Sort the rest of the entries according to the header
         # data
-        for i in range(1, len(a_data)):
-            _tmp_database[_tmp_entry["uuid"]] = self._processSingleLine(a_data[i])
+        for i in range(1, len(a_rawData)):
+            _tmp_entry : dict = self._processSingleLine(
+                _tmp_header, a_rawData[i]
+            )
+            _tmp_database[_tmp_entry["uuid"]] = _tmp_entry
 
         return _tmp_database
+
+    def generate(self, target, source, env):
+        _tmp_rawData : list = self._loadFromCSV(str(os.path.normpath(str(source[0]))))
+        _tmp_data : dict = self._parseRawData(_tmp_rawData)
+
+        self._export(_tmp_data, str(os.path.normpath(str(target[0]))))
 
 class FromJSON(Base):
     def __init__(self):
@@ -94,3 +105,20 @@ class Merging:
 
             for _key in list(_source.keys()):
                 self._addKeyValuePair(a_target, _key, _source[_key])
+
+class MergeFromFileJSON(FromJSON, Merging):
+    def __init__(self):
+        FromJSON.__init__(self)
+        Merging.__init__(self)
+
+    def generate(self, target, source, env):
+        _tmp_sourceDataList : list = []
+        _tmp_merged : dict = {}
+
+        for _source in source:
+            _tmp_sourceDataList.append(
+                self._loadFromJSON(str(_source))
+            )
+
+        self._mergeDatabases(_tmp_merged, _tmp_sourceDataList)
+        self._export(_tmp_merged, str(target[0]))

@@ -1,6 +1,10 @@
 ###############################################################################
 # SECTION: Project ############################################################
 ###############################################################################
+# DESCRIPTION: Procedural files
+/build/proceduralFiles/*
+!/build/proceduralFiles/SConscript
+
 # DESCRIPTION: Windows AMD64 build
 /build/executables/windows/*
 !/build/executables/windows/SConscript

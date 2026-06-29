@@ -1,8 +1,5 @@
 import MWE_Transpiler.Databases.Templates as MWE_Transpiler_Databases_Templates
 
-class Generator:
+class Generator(MWE_Transpiler_Databases_Templates.MergeFromFileJSON):
     def __init__(self):
-        pass
-
-    def generate(self, target, source, env):
-        pass
+        MWE_Transpiler_Databases_Templates.MergeFromFileJSON.__init__(self)
