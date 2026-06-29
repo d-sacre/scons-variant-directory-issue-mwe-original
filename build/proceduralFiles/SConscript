@@ -1,0 +1,158 @@
+# -*- mode: python -*-
+# SCons build file
+
+##################################################################################
+# DESCRIPTION: Module Imports ####################################################
+##################################################################################
+# REMARK: Expects that in SConstruct the tool path is loaded via
+# sys.path.append(os.path.abspath("./tools/")) 
+import MWE_Utilities as mweu
+from MWE_Transpiler import MWE_Transpiler
+
+##################################################################################
+# DESCRIPTION: Data import and generation ########################################
+##################################################################################
+Import('env', 'PROJECT_ROOT_DIRECTORY')
+
+VARIANT_DIRECTORY_RELATIVE_PATH : str = "/build/proceduralFiles/"
+
+##################################################################################
+##################################################################################
+# SECTION: Setup of SCons Environment ############################################
+##################################################################################
+##################################################################################
+VariantDir('./', '../../', duplicate = False)
+proceduralFiles = env.Clone()
+
+_tmp_transpiler = MWE_Transpiler()
+
+customBuilders : list = [
+    {
+        "name": 'ValueDatabase',
+        "action": _tmp_transpiler.Database.Values.Local.UserDefined.generate
+    },
+    {
+        "name": 'GlobalUserDefinedValueDatabase',
+        "action": _tmp_transpiler.Database.Values.Global.UserDefined.generate
+    },
+    {
+        "name": 'CalculationDatabase',
+        "action": _tmp_transpiler.Database.Calculations.Local.generate
+    },
+    {
+        "name": 'GlobalCalculationDatabase',
+        "action": _tmp_transpiler.Database.Calculations.Global.generate
+    },
+    {
+        "name": 'GlobalValueDatabase',
+        "action": _tmp_transpiler.Database.Values.Global.Compiled.generate
+    },
+    {
+        "name": 'LocalCompiledValueDatabase',
+        "action": _tmp_transpiler.Database.Values.Local.Compiled.generate
+    },
+    {
+        "name": 'TestRoutineHeaderFile',
+        "action": _tmp_transpiler.SourceCode.Header.TestRoutines.generate
+    },
+    {
+        "name": 'ValueHeaderFile',
+        "action": _tmp_transpiler.SourceCode.Header.Values.generate
+    }
+]
+
+_tmp_customBuildersInitialized : dict = {}
+for _customBuilder in customBuilders:
+    _tmp_customBuildersInitialized[_customBuilder["name"]] = Builder(
+        action = _customBuilder["action"]
+    )
+
+proceduralFiles.Append(BUILDERS = _tmp_customBuildersInitialized)
+
+##################################################################################
+# DESCRIPTION: Create procedural file data base ##################################
+##################################################################################
+# REMARK: Not adding this as a builder to the SCons environment ensures that no
+# source has to be specified and all changes will lead to a rebuild of all
+# relevant files. If it would be called as a SCons builder, the glob approach
+# would no longer work and changes would be lost. The only downside of not having
+# a SCons builder is that the logic is run every time, which costs performance. 
+PROCEDURAL_FILE_DATABASE = _tmp_transpiler.Database.TargetSourcePairs.generate()
+
+# ##################################################################################
+# # DESCRIPTION: Feed builders with target source pairs ############################
+# ##################################################################################
+# # DESCRIPTION: Create user defined value data bases  
+# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["database"]["values"]["local"]["userDefined"]:
+#     proceduralFiles.ValueDatabase(
+#         _targetSourcePair["target"], _targetSourcePair["source"]
+#     )
+
+# # DESCRIPTION: Create global value data base, so that values can be shared 
+# proceduralFiles.GlobalUserDefinedValueDatabase(
+#     PROCEDURAL_FILE_DATABASE["database"]["values"]["global"]["userDefined"]["target"], 
+#     PROCEDURAL_FILE_DATABASE["database"]["values"]["global"]["userDefined"]["source"]
+# )
+
+# # DESCRIPTION: Create calculation data bases
+# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["database"]["calculations"]["local"]:
+#     proceduralFiles.CalculationDatabase(
+#         _targetSourcePair["target"], _targetSourcePair["source"]
+#     )
+
+# proceduralFiles.GlobalCalculationDatabase(
+#     PROCEDURAL_FILE_DATABASE["database"]["calculations"]["global"]["target"],
+#     PROCEDURAL_FILE_DATABASE["database"]["calculations"]["global"]["source"]
+# )
+
+# # DESCRIPTION: Create global value data base
+# proceduralFiles.GlobalValueDatabase(
+#     PROCEDURAL_FILE_DATABASE["database"]["values"]["global"]["compiled"]["target"],
+#     PROCEDURAL_FILE_DATABASE["database"]["values"]["global"]["compiled"]["source"]
+# )
+
+# # DESCRIPTION: Create local compiled value data bases:
+# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["database"]["values"]["local"]["compiled"]:
+#     proceduralFiles.LocalCompiledValueDatabase(
+#         _targetSourcePair["target"], _targetSourcePair["source"]
+#     )
+
+# # DESCRIPTION: Create value header files
+# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["sourceCode"]["header"]["value"]:
+#     proceduralFiles.ValueHeaderFile(
+#         _targetSourcePair["target"], _targetSourcePair["source"]
+#     )
+
+#     # DESCRIPTION: Copy from build folder to sources
+#     # REMARK: Required, since SCons variant directory approach does not allow
+#     # to build the target files in the source directory directly
+#     _tmp_copyTargetSourcePair : dict = mweu.createCopyTargetValuePair(
+#         VARIANT_DIRECTORY_RELATIVE_PATH,
+#         "",
+#         _targetSourcePair["target"]
+#     )
+#     proceduralFiles.Command(
+#         _tmp_copyTargetSourcePair["target"], 
+#         _tmp_copyTargetSourcePair["source"], 
+#         Copy("$TARGET", "$SOURCE")
+#     )
+
+# # DESCRIPTION: Create Test Routine Header files
+# for _targetSourcePair in PROCEDURAL_FILE_DATABASE["sourceCode"]["header"]["testRoutine"]:
+#     proceduralFiles.TestRoutineHeaderFile(
+#         _targetSourcePair["target"], _targetSourcePair["source"]
+#     )
+
+#     # DESCRIPTION: Copy from build folder to sources
+#     # REMARK: Required, since SCons variant directory approach does not allow
+#     # to build the target files in the source directory directly
+#     _tmp_copyTargetSourcePair : dict = mweu.createCopyTargetValuePair(
+#         VARIANT_DIRECTORY_RELATIVE_PATH,
+#         "",
+#         _targetSourcePair["target"]
+#     )
+#     proceduralFiles.Command(
+#         _tmp_copyTargetSourcePair["target"], 
+#         _tmp_copyTargetSourcePair["source"], 
+#         Copy("$TARGET", "$SOURCE")
+#     )

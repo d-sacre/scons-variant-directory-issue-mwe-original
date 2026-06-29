@@ -1,6 +1,34 @@
 import os
 import sysconfig
 
+class Manipulation:
+    def __init__(self):
+        pass
+
+    def split(self, a_path : str) -> list:
+        return os.path.normpath(a_path).split(os.sep)
+
+    def join(self, a_path : list) -> str:
+        return str(os.path.join(*a_path))
+
+    def getHead(self, a_path : str) -> str:
+        return (os.path.split((os.path.normpath(a_path))))[0]
+
+    def getTail(self, a_path : str) -> str:
+        return (os.path.split((os.path.normpath(a_path))))[1]
+
+class _Path:
+    def __init__(self):
+        self.Manipulation = Manipulation()
+
+    def isFile(self, a_path : str) -> bool:
+        return os.path.isfile(a_path)
+
+    def isDirectory(self, a_path : str) -> bool:
+        return os.path.isdir(a_path)
+
+Path = _Path()
+
 def getCurrentWorkingDirectory() -> str:
     return os.getcwd()
 
@@ -15,3 +43,43 @@ def getHostPlatform() -> str:
     _tmp_hostPlatform = _tmp_hostPlatform.replace("win", "windows")
 
     return _tmp_hostPlatform
+
+def createCopyTargetValuePair(
+    a_variantDirectory : str,
+    a_targetDirectoryRelativePath : str,
+    a_originalFilePathSCons : str
+) -> dict:
+    # DESCRIPTION: Prepare the data
+    _tmp_variantDirectorySplit : list = Path.Manipulation.split(
+        a_variantDirectory
+    )
+
+    # REMARK: Not including the file name allows for easier manipulation
+    # later on, especially when adding the target directory path
+    _tmp_targetFilePathSplit : list = Path.Manipulation.split(
+        Path.Manipulation.getHead(
+            a_originalFilePathSCons
+        )
+    )
+
+    _tmp_fileName : str = Path.Manipulation.getTail(
+        a_originalFilePathSCons
+    )
+
+    # DESCRIPTION: Prepend enough move up instructions, so that root directory
+    # of project is reached
+    for _i in range(len(_tmp_variantDirectorySplit)):
+        _tmp_targetFilePathSplit.insert(0, "../")
+
+    # DESCRIPTION: Add relative target offset if required
+    if a_targetDirectoryRelativePath != "":
+        _tmp_targetFilePathSplit = _tmp_targetFilePathSplit + Path.Manipulation.split(
+            a_targetDirectoryRelativePath
+        )
+
+    _tmp_targetFilePathSplit.append(_tmp_fileName)
+
+    return {
+        "target": Path.Manipulation.join(_tmp_targetFilePathSplit), 
+        "source": a_originalFilePathSCons
+    }

@@ -17,14 +17,14 @@ TARGET_INDEPENDENT_CPP_FLAGS : list = ['-std=c++20', '-Wall']
 ##################################################################################
 # DESCRIPTION: Define targets and sources for test routines ######################
 ##################################################################################
-# REMARK: Do not specifiy file type for target, as it has to be adapted for each
+# REMARK: Do not specify file type for target, as it has to be adapted for each
 # target platform individually
 programTarget : str = 'bin/test' 
 programSources : list = ['src/test.cpp']
 
 ##################################################################################
 ##################################################################################
-# DESCRIPTION: SCONS: Configuration ##############################################
+# SECTION: SCONS: Configuration ##################################################
 ##################################################################################
 ##################################################################################
 # DESCRIPTION: Constants
@@ -100,7 +100,9 @@ Export(
 )
 
 ###############################################################################
-# DESCRIPTION: Procedural file generation #####################################
+###############################################################################
+# SECTION: Procedural file generation #########################################
+###############################################################################
 ###############################################################################
 # DESCRIPTION: Hack to trigger another run of SCons BEFORE starting the
 # compilation. Only trigger when the --generate-procedural-code command
@@ -123,17 +125,19 @@ Export(
 # ensures that when the second instance of SCons is finished, all required 
 # files are existing and valid, so that the compilation with the first
 # SCons process can continue.
-# if not GetOption('help'):
-#     if not GetOption('generateProceduralCode'):
-#         print("\n[  START  ] Procedural Code Generation")
-#         os.system('scons --generate-procedural-code')
-#         print("[   END   ] Procedural Code Generation\n")
+if not GetOption('help'):
+    if not GetOption('generateProceduralCode'):
+        print("\n[  START  ] Procedural Code Generation")
+        os.system('scons --generate-procedural-code')
+        print("[   END   ] Procedural Code Generation\n")
 
-#     if GetOption('generateProceduralCode'):
-#         SConscript('./build/proceduralFiles/SConscript')
+    if GetOption('generateProceduralCode'):
+        SConscript('./build/proceduralFiles/SConscript')
 
 ###############################################################################
-# DESCRIPTION: Binary creation ################################################
+###############################################################################
+# SECTION: Executable creation ################################################
+###############################################################################
 ###############################################################################
 # DESCRIPTION: Only procede to C++ compilation when not in generate procedural
 # code mode
