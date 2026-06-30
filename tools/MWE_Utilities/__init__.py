@@ -54,6 +54,8 @@ def createCopyTargetValuePair(
         a_variantDirectory
     )
 
+    _tmp_variantDirectorySplit.pop(_tmp_variantDirectorySplit.index(""))
+
     # REMARK: Not including the file name allows for easier manipulation
     # later on, especially when adding the target directory path
     _tmp_targetFilePathSplit : list = Path.Manipulation.split(

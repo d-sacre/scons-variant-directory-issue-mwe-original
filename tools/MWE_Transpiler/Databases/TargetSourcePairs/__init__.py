@@ -55,5 +55,14 @@ class Generator:
                         'databases/g_ab.values.global.compiled.json'
                     ]
                 }
+            ],
+            "sourceCode/header/value": [
+                {
+                    "target": 'src/g_a_values.hpp',
+                    "source": [
+                        'databases/local/g_a.values.local.compiled.json',
+                        'src/transpiler/test_values.transpiler.template.hpp'
+                    ]
+                }
             ]
         }
