@@ -16,5 +16,9 @@ To start the compilation, run the following command:
 ```
 scons --target-platform=<YOUR_HOST_PLATFORM>
 ```
+Available options are: `linux.x86_64`, `windows.amd64`.<br>
 If you specify a target platform that is different to your host platform, the build tool
 will halt with an error (cross-compilation is not implemented in this MWE).
+
+## Bug Status
+In the current version, this MWE does **NOT** show the constant deletion in the variant directory `build/proceduralFiles`.
