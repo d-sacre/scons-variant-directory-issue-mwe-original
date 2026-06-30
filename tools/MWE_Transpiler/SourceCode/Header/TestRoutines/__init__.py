@@ -39,7 +39,7 @@ class Generator(MWE_Transpiler_Databases_Templates.FromJSON):
                     _tmp_data["operation"],
                     "m_values->%s" % _tmp_data["uuid"]
                 )
-                _tmp_functionCalls += "std::cout << UUID %s: %s = << %s <<" % _tmp_replacement
+                _tmp_functionCalls += "std::cout << \"UUID %s: %s = \" << %s <<" % _tmp_replacement
                 _tmp_functionCalls += r' "\n";'
                 _tmp_functionCalls += "\n"
 
