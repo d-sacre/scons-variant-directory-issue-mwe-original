@@ -137,22 +137,22 @@ for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["sourceCode/header/value
         Copy("$TARGET", "$SOURCE")
     )
 
-# # DESCRIPTION: Create Test Routine Header files
-# for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["sourceCode/header/testRoutine"]:
-#     proceduralFiles.TestRoutineHeaderFile(
-#         _targetSourcePair["target"], _targetSourcePair["source"]
-#     )
+# DESCRIPTION: Create Test Routine Header files
+for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["sourceCode/header/testRoutine"]:
+    proceduralFiles.TestRoutineHeaderFile(
+        _targetSourcePair["target"], _targetSourcePair["source"]
+    )
 
-#     # DESCRIPTION: Copy from build folder to sources
-#     # REMARK: Required, since SCons variant directory approach does not allow
-#     # to build the target files in the source directory directly
-#     _tmp_copyTargetSourcePair : dict = mweu.createCopyTargetValuePair(
-#         VARIANT_DIRECTORY_RELATIVE_PATH,
-#         "",
-#         _targetSourcePair["target"]
-#     )
-#     proceduralFiles.Command(
-#         _tmp_copyTargetSourcePair["target"], 
-#         _tmp_copyTargetSourcePair["source"], 
-#         Copy("$TARGET", "$SOURCE")
-#     )
+    # DESCRIPTION: Copy from build folder to sources
+    # REMARK: Required, since SCons variant directory approach does not allow
+    # to build the target files in the source directory directly
+    _tmp_copyTargetSourcePair : dict = mweu.createCopyTargetValuePair(
+        VARIANT_DIRECTORY_RELATIVE_PATH,
+        "",
+        _targetSourcePair["target"]
+    )
+    proceduralFiles.Command(
+        _tmp_copyTargetSourcePair["target"], 
+        _tmp_copyTargetSourcePair["source"], 
+        Copy("$TARGET", "$SOURCE")
+    )

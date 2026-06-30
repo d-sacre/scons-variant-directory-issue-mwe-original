@@ -64,5 +64,23 @@ class Generator:
                         'src/transpiler/test_values.transpiler.template.hpp'
                     ]
                 }
+            ],
+            "sourceCode/header/testRoutine": [
+                {
+                    "target": 'src/g_b1_calculations.hpp',
+                    "source": [
+                        'databases/local/g_b1.calculation.local.json',
+                        'databases/g_ab.values.global.compiled.json',
+                        'src/transpiler/test_routine.transpiler.template.hpp'
+                    ]
+                },
+                {
+                    "target": 'src/g_b2_calculations.hpp',
+                    "source": [
+                        'databases/local/g_b2.calculation.local.json',
+                        'databases/g_ab.values.global.compiled.json',
+                        'src/transpiler/test_routine.transpiler.template.hpp'
+                    ]
+                }
             ]
         }
