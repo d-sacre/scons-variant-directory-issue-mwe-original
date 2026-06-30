@@ -28,6 +28,10 @@ _tmp_transpiler = MWE_Transpiler()
 
 customBuilders : list = [
     {
+        "name": 'FunctionCallTemplateDatabase',
+        "action": _tmp_transpiler.Database.FunctionCallTemplates.generate 
+    },
+    {
         "name": 'ValueDatabase',
         "action": _tmp_transpiler.Database.Values.Local.UserDefined.generate
     },
@@ -82,6 +86,12 @@ TRANSPILER_TARGET_SOURCE_PAIRS = _tmp_transpiler.Database.TargetSourcePairs.gene
 ##################################################################################
 # DESCRIPTION: Feed builders with target source pairs ############################
 ##################################################################################
+# DESCRIPTION: Function template data base
+proceduralFiles.FunctionCallTemplateDatabase(
+    TRANSPILER_TARGET_SOURCE_PAIRS["database/functionCallTemplates"]["target"],
+    TRANSPILER_TARGET_SOURCE_PAIRS["database/functionCallTemplates"]["source"]
+)
+
 # DESCRIPTION: Create user defined value data bases  
 for _targetSourcePair in TRANSPILER_TARGET_SOURCE_PAIRS["database/values/local/userDefined"]:
     proceduralFiles.ValueDatabase(

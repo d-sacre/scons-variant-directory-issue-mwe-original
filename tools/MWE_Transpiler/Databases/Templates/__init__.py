@@ -42,7 +42,6 @@ class FromCSV(Base):
 
         # DESCRIPTION: Get the header for later use as keys
         _tmp_header = (a_rawData[0].replace("\n", "")).split(",")
-        print(_tmp_header)
 
         # DESCRIPTION: Sort the rest of the entries according to the header
         # data

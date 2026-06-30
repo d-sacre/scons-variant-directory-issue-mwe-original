@@ -11,6 +11,12 @@ class Generator:
     # the complex glob based approach in the actual project
     def generate(self) -> dict:
         return {
+            "database/functionCallTemplates": {
+                "target": 'databases/g_test.function.call.template.database.json',
+                "source": [
+                    'src/transpiler/emptyTest.function.call.transpiler.template.cpp'
+                ]
+            },
             "database/values/local/userDefined": [
                 {
                     "target": 'databases/local/g_a.values.local.user_defined.json', 
@@ -23,19 +29,19 @@ class Generator:
             },
             "database/calculations/local": [
                 {
-                    "target": 'databases/local/g_b1.calculation.local.json',
+                    "target": 'databases/local/g_b1.calculations.local.json',
                     "source": ['src/b1.calculations.csv']
                 },
                 {
-                    "target": 'databases/local/g_b2.calculation.local.json',
+                    "target": 'databases/local/g_b2.calculations.local.json',
                     "source": ['src/b2.calculations.csv']
                 }
             ],
             "database/calculations/global": {
                 "target": 'databases/g_b.calculations.global.json',
                 "source": [
-                    'databases/local/g_b1.calculation.local.json',
-                    'databases/local/g_b2.calculation.local.json'
+                    'databases/local/g_b1.calculations.local.json',
+                    'databases/local/g_b2.calculations.local.json'
                 ]
             },
             "database/values/global/compiled": {
@@ -50,8 +56,8 @@ class Generator:
                     "target": 'databases/local/g_a.values.local.compiled.json',
                     "source": [
                         'databases/local/g_a.values.local.user_defined.json',
-                        'databases/local/g_b1.calculation.local.json',
-                        'databases/local/g_b2.calculation.local.json',
+                        'databases/local/g_b1.calculations.local.json',
+                        'databases/local/g_b2.calculations.local.json',
                         'databases/g_ab.values.global.compiled.json'
                     ]
                 }
@@ -69,16 +75,18 @@ class Generator:
                 {
                     "target": 'src/g_b1_calculations.hpp',
                     "source": [
-                        'databases/local/g_b1.calculation.local.json',
+                        'databases/local/g_b1.calculations.local.json',
                         'databases/g_ab.values.global.compiled.json',
+                        'databases/g_test.function.call.template.database.json',
                         'src/transpiler/test_routine.transpiler.template.hpp'
                     ]
                 },
                 {
                     "target": 'src/g_b2_calculations.hpp',
                     "source": [
-                        'databases/local/g_b2.calculation.local.json',
+                        'databases/local/g_b2.calculations.local.json',
                         'databases/g_ab.values.global.compiled.json',
+                        'databases/g_test.function.call.template.database.json',
                         'src/transpiler/test_routine.transpiler.template.hpp'
                     ]
                 }

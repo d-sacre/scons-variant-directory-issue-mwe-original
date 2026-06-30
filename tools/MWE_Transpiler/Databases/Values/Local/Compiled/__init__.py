@@ -24,7 +24,7 @@ class Generator(MWE_Transpiler_Databases_Templates.FromJSON):
             if _tmp_filePath.endswith('.values.local.user_defined.json'):
                 _tmp_categoryID = "explicit"
 
-            if _tmp_filePath.endswith('.calculation.local.json'):
+            if _tmp_filePath.endswith('.calculations.local.json'):
                 _tmp_categoryID = "derived"
 
             if not _tmp_filePath.endswith('.values.global.compiled.json'):

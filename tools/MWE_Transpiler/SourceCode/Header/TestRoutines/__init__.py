@@ -10,7 +10,7 @@ class Generator(MWE_Transpiler_Databases_Templates.FromJSON):
         for _source in a_sources:
             _tmp_filePath : str = str(_source)
 
-            if _tmp_filePath.endswith(".calculation.local.json"):
+            if _tmp_filePath.endswith(".calculations.local.json"):
                 self._filePaths["database/calculations/local"] = _tmp_filePath
 
             if _tmp_filePath.endswith(".hpp"):
